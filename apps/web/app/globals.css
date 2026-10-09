@@ -406,3 +406,26 @@ details {
     padding: 14px;
   }
 }
+
+.generation-ready {
+  color: #86d9b1;
+  font-size: 13px;
+}
+.generated-answer {
+  border: 1px solid #365579;
+  background: #121e30;
+  border-radius: 12px;
+  padding: 24px;
+}
+.answer-text {
+  white-space: pre-wrap;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.answer-text a {
+  color: #91c2ff;
+  text-decoration: underline;
+}
+.generated-answer details p {
+  overflow-wrap: anywhere;
+}

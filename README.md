@@ -4,7 +4,9 @@ A local experimentation platform for retrieval-augmented generation. Upload docu
 
 **Implemented:** Next.js dashboard; FastAPI; PostgreSQL/pgvector; TXT, Markdown, and text-based PDF ingestion; source chunk inspection; local MiniLM embeddings; retrieval with source IDs, page references, scores, and timings; read-only mode; CI.
 
-**Not implemented yet:** Ollama generation, benchmark datasets/worker, model comparison, or measured quality metrics. Returned chunks are evidence, not generated answers. No benchmark scores are fabricated.
+**Implemented in milestone 3:** opt-in Ollama generation, grounded answers with source references, abstention, and persisted query traces.
+
+**Not implemented yet:** benchmark datasets/worker, model comparison, or measured quality metrics. Search returns source evidence; the playground generates answers only when a local model is available. No benchmark scores are fabricated.
 
 See [the full project plan](docs/project-plan.md) for proposed later milestones.
 
@@ -23,10 +25,11 @@ source .venv/bin/activate
 pip install -e 'apps/api[dev]'
 ```
 
-New database volumes run both migrations automatically. For an existing volume, apply the additional migration:
+New database volumes run all migrations automatically. For an existing volume, apply the additional migrations:
 
 ```bash
 docker compose exec -T db psql -v ON_ERROR_STOP=1 -U raglab -d raglab < supabase/migrations/0002_ingestion.sql
+docker compose exec -T db psql -v ON_ERROR_STOP=1 -U raglab -d raglab < supabase/migrations/0003_query_traces.sql
 ```
 
 Start the API in a terminal with the virtualenv activated:
@@ -76,6 +79,54 @@ Reload documents in the dashboard, select a document, and click **Index vectors*
 
 Vector retrieval uses exact cosine search, appropriate for a small portfolio corpus. Hybrid combines up to four times top-K candidates from each strategy using RRF with k=60 and deduplicates by chunk ID. Similarity, lexical rank, and RRF scores are different quantities, not correctness probabilities.
 
+## Enable local RAG answers (milestone 3)
+
+Ollama generation works with keyword retrieval, so it does not require the MiniLM download. Generation is disabled by default and requires an installed, explicitly configured model. On a CPU machine, start with `qwen2.5:1.5b`; allow roughly 2–4 GiB of model/runtime memory plus the other applications. Larger models need separate hardware checks.
+
+From the repository root:
+
+```bash
+docker compose --profile generation up -d ollama
+docker compose exec ollama ollama pull qwen2.5:1.5b
+```
+
+Restart the native API from `apps/api` with its virtualenv activated:
+
+```bash
+GENERATION_ENABLED=true uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+In the dashboard, refresh the playground, select a document/model, and ask `What is cosine similarity?`. Use **PostgreSQL full-text** until a vector model is available. Click inline references such as `[S1]` to inspect the exact excerpt, filename, and page used in the prompt.
+
+`GET /capabilities` reports live generation only when Ollama is reachable and a configured model is installed. `/health` reports configuration, not model readiness. Models can still fail during inference. The UI shows those failures and their trace IDs, rather than presenting a stored answer as a new response.
+
+Configure `OLLAMA_MODELS` as a JSON array in the API environment to allow other model tags; arbitrary request-specified models are rejected. `OLLAMA_URL` defaults to the local service. The compose API service uses `http://ollama:11434`; to enable it, set `GENERATION_ENABLED=true` when starting the API with the generation profile. The optional API Docker image remains unvalidated in this cloud runner because of build-container DNS.
+
+### Context, citations, and traces
+
+The API uses prompt version `grounded-json-v1`, temperature 0, seed 42, a 384-token default output budget, and up to 10,000 characters of whole source chunks. Oversized chunks are excluded instead of silently cut in half; if no retrieved chunk fits, the request fails. Character budgeting is approximate: multilingual text or long questions can exceed the provider's tokenizer context window, so token-aware budgeting is future work.
+
+Models return structured JSON. The backend rejects unknown IDs, missing references, inconsistent inline/reference lists, and malformed or truncated output. Citation IDs confirm membership in the supplied context; they do **not** establish correctness or faithfulness. Those require the later evaluation milestone. Source excerpts are marked as untrusted data in the prompt; prompt instructions alone do not guarantee resistance to document injection.
+
+If retrieval finds no source, the API returns a deterministic no-evidence abstention and labels `generation_performed=false`; Ollama is not called. A model can also abstain when retrieved evidence is insufficient. Abstention text is canonical and includes no unsupported factual answer.
+
+A single-process API permits one generation request at a time (429 when busy). Provider timeouts return 504. Connection/model availability failures return 503. Transient 429/503 responses are retried at most once; timed-out generation is not retried. The default provider timeout is 90 seconds and configurable up to 300 seconds. CPU generation may take a minute.
+
+The database saves the question, retrieval/configuration versions, exact included excerpts, system prompt, model tag/digest, token counts when reported, timing, result, and errors. Malformed answer JSON and invalid citation output are retained in failed traces for diagnosis, but never displayed as an accepted answer. `GET /queries/{trace_id}` reads a saved trace. Query traces contain uploaded document text and questions; keep the API private. If the API process is interrupted, a trace may remain `running`; automated interruption recovery is future work. Deleting a document currently cascades to its traces.
+
+### Cloud model provisioning
+
+The model registry redirects weights to a separate CDN. Required additions are `registry.ollama.ai` and `dd20bb891979d25aebc8bec07b2b3bbc.r2.cloudflarestorage.com`, saved in the environment draft. The current cloud proxy still denies the CDN; review/save the network settings before retrying.
+
+If a Docker container cannot use the host proxy, provision the model through the host with the API virtualenv:
+
+```bash
+python scripts/pull_ollama_model.py --model qwen2.5:1.5b --directory /workspace/raglab-ollama/models
+OLLAMA_DATA_PATH=/workspace/raglab-ollama docker compose --profile generation up -d ollama
+```
+
+This helper uses the official public registry and verifies each blob's SHA-256 and byte count before publishing its manifest. TLS verification stays enabled; failed downloads are not accepted. Use the same `OLLAMA_DATA_PATH` on later compose commands so the model volume stays consistent. Model tags can change upstream; actual loaded manifest digests are recorded in each trace.
+
 ## Validate
 
 ```bash
@@ -93,6 +144,12 @@ EMBEDDING_MODEL_PATH=../../.models/all-MiniLM-L6-v2 RAGLAB_INTEGRATION=1 RAGLAB_
 
 Unit tests can run without PostgreSQL using `pytest`; database and real-model checks are explicitly skipped when not enabled. Tests using deterministic test vectors validate SQL behavior only, while the separate real-model test checks semantic retrieval with the actual pinned model. Neither is a benchmark-quality evaluation.
 
+To exercise a real Ollama answer with the pulled model running:
+
+```bash
+RAGLAB_INTEGRATION=1 RAGLAB_OLLAMA_INTEGRATION=1 pytest
+```
+
 From `apps/web`:
 
 ```bash
@@ -109,6 +166,8 @@ npm run typecheck
 - `GET /documents/{id}/chunks`: paginated source chunks.
 - `POST /documents/{id}/index`: add or refresh vectors.
 - `POST /search`: JSON `question`, `document_id`, `strategy` (`keyword`, `vector`, `hybrid`), `top_k` (1–20).
+- `POST /query`: search parameters plus an optional configured `model`; generates a grounded answer.
+- `GET /queries/{trace_id}`: persisted result or failure trace.
 - `GET /capabilities`, `/overview`, `/experiments`, `/health`, `/ready`.
 
 ## Database and deployment
@@ -119,8 +178,10 @@ This is a local/private application. Set `PRIVATE_UPLOADS_ENABLED=false` before 
 
 ## Current validation
 
-The ingestion/retrieval suite passes 21 tests against PostgreSQL, including vector SQL and RRF tests using deterministic test vectors. Frontend build/type checking and browser upload, source inspection, keyword search, duplicate/error handling, and mobile layout were verified. The separate real-MiniLM test is currently skipped: the cloud proxy allows model configuration downloads but denies the weight CDN. Actual model inference and semantic retrieval are not yet verified here. The required domains are saved in the environment draft; review/save those network changes before retrying the download.
+37 tests pass against PostgreSQL, covering ingestion, retrieval, citation validation, abstention, persisted failures, concurrency, provider retry/timeout behavior, and model artifact checksums. Frontend production build and TypeScript checks pass. Browser checks verify the actual unavailable/model-missing states; successful citation rendering and abstention presentation use explicit test fixtures, not a real model.
+
+Two real-model tests are explicitly skipped: the MiniLM weight CDN and Ollama weight CDN are blocked by the cloud proxy. Ollama 0.12.6 starts and answers its version/model-list endpoints, but no real LLM answer has been generated here. Review and save the recorded network requirements, retry provisioning, then enable the real-model tests. Do not treat the mocked tests as evidence of model quality or a benchmark.
 
 ## Next milestone
 
-Add Ollama generation with validated citation IDs, then a persistent evaluation worker and manually labeled datasets. Model comparisons must use identical materialized context. No deployment or measured quality results are claimed yet.
+Build a persistent evaluation worker, create manually validated labels, and measure retrieval/answer quality and latency. Model comparisons must use identical materialized context. No deployment or measured quality results are claimed yet.

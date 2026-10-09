@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { request, type Overview, type Experiment } from "../lib/api";
 import CorpusWorkspace from "../components/CorpusWorkspace";
+import RAGPlayground from "../components/RAGPlayground";
 
 export default function Dashboard() {
   const [data, setData] = useState<Overview | null>(null);
@@ -42,6 +43,7 @@ export default function Dashboard() {
         <nav>
           <a href="#overview">Overview</a>
           <a href="#documents">Documents & search</a>
+          <a href="#playground">Playground</a>
           <a href="#experiments">Experiments</a>
           <a href="#roadmap">Roadmap</a>
         </nav>
@@ -54,7 +56,7 @@ export default function Dashboard() {
       <main id="overview">
         <header>
           <span className="eyebrow">BUILD → MEASURE → IMPROVE</span>
-          <span className="badge">Ingestion & retrieval</span>
+          <span className="badge">Grounded RAG playground</span>
         </header>
         <h1>
           Make your retrieval
@@ -66,8 +68,10 @@ export default function Dashboard() {
           and understanding why a RAG system succeeds or fails.
         </p>
         <div className="notice">
-          Live generation is unavailable. Search returns traceable source
-          chunks, not a generated answer. Benchmark metrics remain unmeasured.
+          {data?.live_generation
+            ? "Local generation is available in the playground. Review each answer against its source excerpts."
+            : "Live generation is unavailable. Start Ollama and enable generation to use the playground; source search remains available."}{" "}
+          Benchmark metrics remain unmeasured.
         </div>
         {error && (
           <div className="error" role="alert">
@@ -95,6 +99,7 @@ export default function Dashboard() {
           </article>
         </div>
         <CorpusWorkspace onChange={() => void load()} />
+        <RAGPlayground />
         <section id="experiments">
           <div className="section-heading">
             <div>
@@ -149,8 +154,11 @@ export default function Dashboard() {
           <div className="roadmap">
             <article>
               <span>01</span>
-              <h3>Generate with citations</h3>
-              <p>Connect Ollama and validate citations against retrieved evidence.</p>
+              <h3>Build a labeled dataset</h3>
+              <p>
+                Create answerable and unanswerable questions with verified
+                source labels.
+              </p>
             </article>
             <article>
               <span>02</span>

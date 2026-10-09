@@ -10,8 +10,15 @@ from psycopg.types.json import Jsonb
 
 from app.db import connect, settings
 from app.embeddings import EmbeddingsUnavailable, MODEL_VERSION, embed, vector_literal
-from app.ingestion.parsing import CHUNK_VERSION, MAX_UPLOAD_BYTES, InvalidDocument, chunk_pages, parse_document
+from app.ingestion.parsing import (
+    CHUNK_VERSION,
+    MAX_UPLOAD_BYTES,
+    InvalidDocument,
+    chunk_pages,
+    parse_document,
+)
 from app.retrieval import reciprocal_rank_fusion
+from app.providers.ollama import generation_status
 
 router = APIRouter()
 DOCUMENT_FIELDS = "id, filename, status, corpus_version, chunking_version, embedding_version, chunk_count, created_at"
@@ -30,18 +37,22 @@ def embeddings(texts):
 
 @router.get("/capabilities")
 def capabilities():
+    generation = generation_status(settings)
     return {
         "private_uploads_enabled": settings.private_uploads_enabled,
         "embedding_model_configured": bool(settings.embedding_model_path),
         "embedding_version": MODEL_VERSION,
-        "live_generation": False,
+        "live_generation": generation["available"],
+        "generation": generation,
     }
 
 
 @router.post("/documents", status_code=201)
 def upload_document(file: UploadFile = File(...), with_vectors: bool = Form(False)):
     if not settings.private_uploads_enabled:
-        raise HTTPException(status_code=403, detail="Uploads are disabled in read-only mode.")
+        raise HTTPException(
+            status_code=403, detail="Uploads are disabled in read-only mode."
+        )
     filename = (file.filename or "").replace("\\", "/").rsplit("/", 1)[-1][:200]
     data = file.file.read(MAX_UPLOAD_BYTES + 1)
     try:
@@ -52,28 +63,55 @@ def upload_document(file: UploadFile = File(...), with_vectors: bool = Form(Fals
     # Check duplicates before expensive inference; UNIQUE also handles concurrent uploads.
     try:
         with connect() as connection:
-            existing = connection.execute("SELECT id FROM documents WHERE content_hash = %s", (content_hash,)).fetchone()
+            existing = connection.execute(
+                "SELECT id FROM documents WHERE content_hash = %s", (content_hash,)
+            ).fetchone()
             if existing:
-                raise HTTPException(status_code=409, detail="This file is already indexed. Use its existing document.")
+                raise HTTPException(
+                    status_code=409,
+                    detail="This file is already indexed. Use its existing document.",
+                )
     except psycopg.Error:
         raise database_error() from None
     vectors = embeddings([chunk.content for chunk in chunks]) if with_vectors else None
-    corpus_version = hashlib.sha256(f"{content_hash}:{CHUNK_VERSION}".encode()).hexdigest()
+    corpus_version = hashlib.sha256(
+        f"{content_hash}:{CHUNK_VERSION}".encode()
+    ).hexdigest()
     try:
         with connect() as connection:
             doc = connection.execute(
                 f"INSERT INTO documents (filename, content_hash, status, corpus_version, chunking_version, embedding_version, chunk_count) VALUES (%s, %s, 'indexed', %s, %s, %s, %s) RETURNING {DOCUMENT_FIELDS}",
-                (filename, content_hash, corpus_version, CHUNK_VERSION, MODEL_VERSION if vectors else None, len(chunks)),
+                (
+                    filename,
+                    content_hash,
+                    corpus_version,
+                    CHUNK_VERSION,
+                    MODEL_VERSION if vectors else None,
+                    len(chunks),
+                ),
             ).fetchone()
             for index, chunk in enumerate(chunks):
                 connection.execute(
                     "INSERT INTO chunks (document_id, content, page, embedding, metadata) VALUES (%s, %s, %s, %s::vector, %s)",
-                    (doc["id"], chunk.content, chunk.page, vector_literal(vectors[index]) if vectors else None,
-                     Jsonb({"ordinal": chunk.ordinal, "chunking_version": CHUNK_VERSION, "embedding_version": MODEL_VERSION if vectors else None})),
+                    (
+                        doc["id"],
+                        chunk.content,
+                        chunk.page,
+                        vector_literal(vectors[index]) if vectors else None,
+                        Jsonb(
+                            {
+                                "ordinal": chunk.ordinal,
+                                "chunking_version": CHUNK_VERSION,
+                                "embedding_version": MODEL_VERSION if vectors else None,
+                            }
+                        ),
+                    ),
                 )
             return doc
     except psycopg.errors.UniqueViolation:
-        raise HTTPException(status_code=409, detail="This file is already indexed.") from None
+        raise HTTPException(
+            status_code=409, detail="This file is already indexed."
+        ) from None
     except psycopg.Error:
         raise database_error() from None
 
@@ -82,18 +120,29 @@ def upload_document(file: UploadFile = File(...), with_vectors: bool = Form(Fals
 def documents(limit: int = Query(50, ge=1, le=100), offset: int = Query(0, ge=0)):
     try:
         with connect() as connection:
-            total = connection.execute("SELECT count(*) AS count FROM documents").fetchone()["count"]
-            items = connection.execute(f"SELECT {DOCUMENT_FIELDS} FROM documents ORDER BY created_at DESC, id LIMIT %s OFFSET %s", (limit, offset)).fetchall()
+            total = connection.execute(
+                "SELECT count(*) AS count FROM documents"
+            ).fetchone()["count"]
+            items = connection.execute(
+                f"SELECT {DOCUMENT_FIELDS} FROM documents ORDER BY created_at DESC, id LIMIT %s OFFSET %s",
+                (limit, offset),
+            ).fetchall()
             return {"items": items, "total": total}
     except psycopg.Error:
         raise database_error() from None
 
 
 @router.get("/documents/{document_id}/chunks")
-def document_chunks(document_id: UUID, limit: int = Query(50, ge=1, le=100), offset: int = Query(0, ge=0)):
+def document_chunks(
+    document_id: UUID,
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+):
     try:
         with connect() as connection:
-            if not connection.execute("SELECT id FROM documents WHERE id = %s", (document_id,)).fetchone():
+            if not connection.execute(
+                "SELECT id FROM documents WHERE id = %s", (document_id,)
+            ).fetchone():
                 raise HTTPException(status_code=404, detail="Document not found")
             items = connection.execute(
                 "SELECT id, document_id, content, page, metadata FROM chunks WHERE document_id = %s ORDER BY (metadata->>'ordinal')::int, id LIMIT %s OFFSET %s",
@@ -107,19 +156,40 @@ def document_chunks(document_id: UUID, limit: int = Query(50, ge=1, le=100), off
 @router.post("/documents/{document_id}/index")
 def index_vectors(document_id: UUID):
     if not settings.private_uploads_enabled:
-        raise HTTPException(status_code=403, detail="Indexing is disabled in read-only mode.")
+        raise HTTPException(
+            status_code=403, detail="Indexing is disabled in read-only mode."
+        )
     try:
         with connect() as connection:
-            doc = connection.execute("SELECT id FROM documents WHERE id = %s", (document_id,)).fetchone()
+            doc = connection.execute(
+                "SELECT id FROM documents WHERE id = %s", (document_id,)
+            ).fetchone()
             if not doc:
                 raise HTTPException(status_code=404, detail="Document not found")
-            chunks = connection.execute("SELECT id, content FROM chunks WHERE document_id = %s ORDER BY (metadata->>'ordinal')::int, id", (document_id,)).fetchall()
+            chunks = connection.execute(
+                "SELECT id, content FROM chunks WHERE document_id = %s ORDER BY (metadata->>'ordinal')::int, id",
+                (document_id,),
+            ).fetchall()
         vectors = embeddings([chunk["content"] for chunk in chunks])
         with connect() as connection:
             for chunk, vector in zip(chunks, vectors, strict=True):
-                connection.execute("UPDATE chunks SET embedding = %s::vector, metadata = metadata || %s WHERE id = %s", (vector_literal(vector), Jsonb({"embedding_version": MODEL_VERSION}), chunk["id"]))
-            connection.execute("UPDATE documents SET embedding_version = %s WHERE id = %s", (MODEL_VERSION, document_id))
-        return {"id": document_id, "embedding_version": MODEL_VERSION, "chunk_count": len(chunks)}
+                connection.execute(
+                    "UPDATE chunks SET embedding = %s::vector, metadata = metadata || %s WHERE id = %s",
+                    (
+                        vector_literal(vector),
+                        Jsonb({"embedding_version": MODEL_VERSION}),
+                        chunk["id"],
+                    ),
+                )
+            connection.execute(
+                "UPDATE documents SET embedding_version = %s WHERE id = %s",
+                (MODEL_VERSION, document_id),
+            )
+        return {
+            "id": document_id,
+            "embedding_version": MODEL_VERSION,
+            "chunk_count": len(chunks),
+        }
     except psycopg.Error:
         raise database_error() from None
 
@@ -138,7 +208,10 @@ def search(request: SearchRequest):
         raise HTTPException(status_code=422, detail="Enter a nonempty question.")
     try:
         with connect() as connection:
-            doc = connection.execute("SELECT filename, embedding_version, corpus_version, chunking_version FROM documents WHERE id = %s", (request.document_id,)).fetchone()
+            doc = connection.execute(
+                "SELECT filename, embedding_version, corpus_version, chunking_version FROM documents WHERE id = %s",
+                (request.document_id,),
+            ).fetchone()
             if not doc:
                 raise HTTPException(status_code=404, detail="Document not found")
             limit = request.top_k * 4 if request.strategy == "hybrid" else request.top_k
@@ -151,23 +224,38 @@ def search(request: SearchRequest):
                 ).fetchall()
             if request.strategy in ("vector", "hybrid"):
                 if doc["embedding_version"] != MODEL_VERSION:
-                    raise HTTPException(status_code=409, detail="This document needs vector indexing with the configured model first.")
+                    raise HTTPException(
+                        status_code=409,
+                        detail="This document needs vector indexing with the configured model first.",
+                    )
                 query_vector = vector_literal(embeddings([request.question])[0])
                 vector = connection.execute(
                     "SELECT id, document_id, content, page, 1 - (embedding <=> %s::vector) AS score FROM chunks WHERE document_id = %s AND embedding IS NOT NULL ORDER BY embedding <=> %s::vector, id LIMIT %s",
                     (query_vector, request.document_id, query_vector, limit),
                 ).fetchall()
-            items = reciprocal_rank_fusion([keyword, vector], request.top_k) if request.strategy == "hybrid" else keyword if request.strategy == "keyword" else vector
+            items = (
+                reciprocal_rank_fusion([keyword, vector], request.top_k)
+                if request.strategy == "hybrid"
+                else keyword if request.strategy == "keyword" else vector
+            )
             for rank, item in enumerate(items, 1):
-                item.update(rank=rank, filename=doc["filename"], citation_id=str(item["id"]))
+                item.update(
+                    rank=rank, filename=doc["filename"], citation_id=str(item["id"])
+                )
             return {
                 "question": request.question,
                 "strategy": request.strategy,
                 "top_k": request.top_k,
                 "corpus_version": doc["corpus_version"],
                 "chunking_version": doc["chunking_version"],
-                "embedding_version": doc["embedding_version"] if request.strategy != "keyword" else None,
-                "score_type": {"keyword": "postgresql_ts_rank_cd", "vector": "cosine_similarity", "hybrid": "rrf"}[request.strategy],
+                "embedding_version": (
+                    doc["embedding_version"] if request.strategy != "keyword" else None
+                ),
+                "score_type": {
+                    "keyword": "postgresql_ts_rank_cd",
+                    "vector": "cosine_similarity",
+                    "hybrid": "rrf",
+                }[request.strategy],
                 "items": items,
                 "retrieval_ms": round((perf_counter() - started) * 1000, 2),
                 "live_generation": False,

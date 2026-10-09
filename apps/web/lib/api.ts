@@ -32,6 +32,11 @@ export async function apiRequest<T>(
     try {
       const body = await response.json();
       if (typeof body.detail === "string") detail = body.detail;
+      else if (body.detail && typeof body.detail.message === "string") {
+        detail = body.detail.message;
+        if (typeof body.detail.trace_id === "string")
+          detail += ` Trace: ${body.detail.trace_id}`;
+      }
     } catch {
       /* Preserve HTTP error if the body is not JSON. */
     }
