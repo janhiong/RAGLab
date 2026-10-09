@@ -3,28 +3,23 @@ import logging
 import psycopg
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from psycopg.rows import dict_row
-
-from app.config import Settings
+from app.db import connect, settings
+from app.documents import router as documents_router
 
 logger = logging.getLogger(__name__)
-settings = Settings()
-app = FastAPI(title="RAG Lab API", version="0.1.0")
+app = FastAPI(title="RAG Lab API", version="0.2.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
 
-def connect():
-    return psycopg.connect(settings.database_url, connect_timeout=3, row_factory=dict_row)
-
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "version": "0.1.0", "live_generation": False}
+    return {"status": "ok", "version": "0.2.0", "live_generation": False}
 
 
 @app.get("/ready")
@@ -34,8 +29,8 @@ def ready():
             with connection.cursor() as cursor:
                 cursor.execute("SELECT extversion FROM pg_extension WHERE extname = 'vector'")
                 extension = cursor.fetchone()
-                cursor.execute("SELECT count(*) AS count FROM documents")
-                cursor.fetchone()
+                cursor.execute("SELECT chunk_count, embedding_version FROM documents LIMIT 0")
+                cursor.fetchall()
                 cursor.execute("SELECT count(*) AS count FROM experiments")
                 cursor.fetchone()
                 if extension is None:
@@ -69,3 +64,6 @@ def experiments():
                 return {"items": cursor.fetchall()}
     except psycopg.Error:
         raise HTTPException(status_code=503, detail="Database or migration unavailable") from None
+
+
+app.include_router(documents_router)

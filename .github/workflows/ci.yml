@@ -23,7 +23,8 @@ jobs:
           import psycopg
           from pathlib import Path
           with psycopg.connect('postgresql://raglab:raglab@localhost:5432/raglab') as c:
-              c.execute(Path('supabase/migrations/0001_initial.sql').read_text())
+              for migration in sorted(Path('supabase/migrations').glob('*.sql')):
+                  c.execute(migration.read_text())
           PY
       - run: RAGLAB_INTEGRATION=1 pytest
         working-directory: apps/api

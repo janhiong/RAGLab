@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import { request, type Overview, type Experiment } from "../lib/api";
+import CorpusWorkspace from "../components/CorpusWorkspace";
 
 export default function Dashboard() {
   const [data, setData] = useState<Overview | null>(null);
@@ -40,6 +41,7 @@ export default function Dashboard() {
         <p className="sidebar-label">EXPERIMENT WORKSPACE</p>
         <nav>
           <a href="#overview">Overview</a>
+          <a href="#documents">Documents & search</a>
           <a href="#experiments">Experiments</a>
           <a href="#roadmap">Roadmap</a>
         </nav>
@@ -52,7 +54,7 @@ export default function Dashboard() {
       <main id="overview">
         <header>
           <span className="eyebrow">BUILD → MEASURE → IMPROVE</span>
-          <span className="badge">Foundation milestone</span>
+          <span className="badge">Ingestion & retrieval</span>
         </header>
         <h1>
           Make your retrieval
@@ -64,8 +66,8 @@ export default function Dashboard() {
           and understanding why a RAG system succeeds or fails.
         </p>
         <div className="notice">
-          Live generation is unavailable. Ingestion, retrieval, and model
-          execution are planned for the next milestone.
+          Live generation is unavailable. Search returns traceable source
+          chunks, not a generated answer. Benchmark metrics remain unmeasured.
         </div>
         {error && (
           <div className="error" role="alert">
@@ -92,6 +94,7 @@ export default function Dashboard() {
             <small>Recall@K and MRR</small>
           </article>
         </div>
+        <CorpusWorkspace onChange={() => void load()} />
         <section id="experiments">
           <div className="section-heading">
             <div>
@@ -146,19 +149,19 @@ export default function Dashboard() {
           <div className="roadmap">
             <article>
               <span>01</span>
-              <h3>Ingest a corpus</h3>
-              <p>Parse PDF, TXT, and Markdown into traceable chunks.</p>
+              <h3>Generate with citations</h3>
+              <p>Connect Ollama and validate citations against retrieved evidence.</p>
             </article>
             <article>
               <span>02</span>
-              <h3>Compare retrieval</h3>
-              <p>Measure vector, PostgreSQL full-text, and hybrid RRF.</p>
+              <h3>Evaluate retrieval</h3>
+              <p>Label a dataset and measure Recall@K, MRR, and latency.</p>
             </article>
             <article>
               <span>03</span>
-              <h3>Diagnose failures</h3>
+              <h3>Compare models</h3>
               <p>
-                Inspect citations and compare local models on identical context.
+                Compare local models on identical context and inspect failures.
               </p>
             </article>
           </div>
