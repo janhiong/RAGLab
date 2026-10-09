@@ -2,7 +2,7 @@
 
 > An experimentation and evaluation platform for RAG systems.
 
-**Status:** Planning document; source code and deployment have not been implemented.  
+**Status:** Original scope and schedule. Six implementation milestones are delivered; see README for current capabilities and outstanding human/model/hosting validation.
 **Goal:** Complete a portfolio version in 10–11 days.  
 **Budget:** $0, prioritizing local models and benchmarks.  
 **Planned deployment:** Vercel + Supabase + a backend hosting service with a suitable free plan.

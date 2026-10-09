@@ -10,9 +10,11 @@ A local experimentation platform for retrieval-augmented generation. Upload docu
 
 **Implemented in milestone 4:** versioned dataset import, a durable evaluation worker, retrieval/latency/failure metrics, manual answer-review forms, and a real provisional development export.
 
-**Not implemented yet:** controlled model comparison, human-validated labels/holdout results, or deployed public hosting. Search returns source evidence; the playground generates answers only when a local model is available. No benchmark scores are fabricated.
+**Implemented in milestone 6:** standalone read-only portfolio at `/demo`, static hosting builds, GitHub Pages workflow, architecture/deployment guides, screenshots, and a demo walkthrough.
 
-See [the full project plan](docs/project-plan.md) for proposed later milestones.
+**Outstanding verification:** human-validated labels/holdout results, real two-model benchmark, and activation of public hosting. Search returns source evidence; the playground generates answers only when a local model is available. No benchmark scores are fabricated.
+
+See [architecture](docs/architecture.md), [deployment instructions](docs/deployment.md), and the [case study](docs/comparison.md). The [original project plan](docs/project-plan.md) records proposed scope.
 
 ## Requirements
 
@@ -212,14 +214,27 @@ npm run typecheck
 
 `docker compose down` stops services and retains the data volume. RLS is enabled with no public table policies. The local API connects as database owner; public deployment requires scoped backend credentials and reviewed policies. Database credentials must stay out of the frontend.
 
-This is a local/private application. Set `PRIVATE_UPLOADS_ENABLED=false` before exposing a read-only public API; it disables uploads and vector indexing. Authentication, public-query rate limits, and worker concurrency controls are not implemented, so do not expose writable endpoints anonymously. The API Dockerfile installs the basic keyword workflow; vector dependencies/model provisioning need separate deployment configuration. Docker build-container DNS was unavailable in this cloud runner, so the optional API Docker image has not been validated here. Use the tested native API workflow.
+This is a local/private application. Set `PRIVATE_UPLOADS_ENABLED=false` before exposing a read-only public API; it disables uploads and vector indexing. Authentication and public-query rate limits are not implemented, so do not expose writable endpoints anonymously. The API Dockerfile installs the basic keyword workflow; vector dependencies/model provisioning need separate deployment configuration. Docker build-container DNS was unavailable in this cloud runner, so the optional API Docker image has not been validated here. Use the tested native API workflow.
 
 ## Current validation
 
-49 tests pass against PostgreSQL, covering ingestion, retrieval, citation validation, abstention, persisted failures, concurrency, provider retry/timeout behavior, and model artifact checksums. Frontend production build and TypeScript checks pass. Browser checks verify the actual unavailable/model-missing states; successful citation rendering and abstention presentation use explicit test fixtures, not a real model.
+49 tests pass against PostgreSQL, covering ingestion, retrieval, citation validation, abstention, persisted failures, concurrency, provider retry/timeout behavior, and model artifact checksums. Frontend normal and static production builds and TypeScript checks pass. Static browser checks verify GitHub Pages path prefixes/assets, saved metrics, all question filters, source drill-down, reload, mobile layout, and zero runtime API requests. Browser checks verify the actual unavailable/model-missing states; successful citation rendering and abstention presentation use explicit test fixtures, not a real model.
 
 Two real-model tests are explicitly skipped: the MiniLM weight CDN and Ollama weight CDN are blocked by the cloud proxy. Ollama 0.12.6 starts and answers its version/model-list endpoints, but no real LLM answer has been generated here. Review and save the recorded network requirements, retry provisioning, then enable the real-model tests. Do not treat the mocked tests as evidence of model quality or a benchmark.
 
-## Next milestone
+## Read-only portfolio (milestone 6)
 
-Prepare the portfolio launch: review dataset labels, validate actual local models, evaluate the reviewed holdout, and document deployment. No public deployment or validated holdout results are claimed yet.
+The local `/demo` page presents the saved paired benchmark with search, failure filters, source excerpts, provenance, and visible limitations. Build a standalone demo without the API or database:
+
+```bash
+cd apps/web
+NEXT_PUBLIC_DEMO_ONLY=true npm run build
+```
+
+Host `apps/web/out` as static files. For GitHub Pages, enable **Settings → Pages → GitHub Actions**, then run **Deploy read-only portfolio** in Actions. See [deployment instructions](docs/deployment.md). GitHub Pages activation could not be performed because the session's GitHub API access was denied; no live deployment is claimed.
+
+![Read-only benchmark portfolio](docs/screenshots/portfolio-desktop.png)
+
+[Short demo walkthrough](docs/screenshots/portfolio-walkthrough.webm) · [Mobile screenshot](docs/screenshots/portfolio-mobile.png)
+
+All six implementation milestones are delivered. Human label review, actual model provisioning, reviewed holdout measurement, and live-host verification remain outstanding validation work.

@@ -43,3 +43,8 @@ jobs:
         working-directory: apps/web
       - run: npm run typecheck
         working-directory: apps/web
+      - run: npm run build
+        working-directory: apps/web
+        env:
+          NEXT_PUBLIC_DEMO_ONLY: 'true'
+          NEXT_PUBLIC_BASE_PATH: /RAGLab

@@ -436,3 +436,17 @@ details {
   font-size: 12px;
   color: #ffcad5;
 }
+
+.demo-code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.6;
+}
+#comparison .muted,
+#method .muted {
+  overflow-wrap: anywhere;
+}
+.metrics strong {
+  overflow-wrap: anywhere;
+}
