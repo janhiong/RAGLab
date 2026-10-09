@@ -1,0 +1,44 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: raglab
+          POSTGRES_PASSWORD: raglab
+          POSTGRES_DB: raglab
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U raglab -d raglab" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -e 'apps/api[dev]'
+      - run: |
+          python - <<'PY'
+          import psycopg
+          from pathlib import Path
+          with psycopg.connect('postgresql://raglab:raglab@localhost:5432/raglab') as c:
+              c.execute(Path('supabase/migrations/0001_initial.sql').read_text())
+          PY
+      - run: RAGLAB_INTEGRATION=1 pytest
+        working-directory: apps/api
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+        working-directory: apps/web
+      - run: npm run build
+        working-directory: apps/web
+      - run: npm run typecheck
+        working-directory: apps/web
