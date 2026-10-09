@@ -2,6 +2,14 @@
 
 The final milestone packages a static saved-results demo. No backend service, database, Ollama, paid API, or secret is required for this deployment. The private workspace remains available locally. The public demo contains only the original CC0 sample and checked-in provisional benchmark; do not replace the imported export with private uploaded documents.
 
+## Netlify
+
+Import `janhiong/RAGLab` from GitHub and select `main`. The root `netlify.toml` supplies the base directory (`apps/web`), build command, publish directory (`out`, relative to the base), Node 22, and static-only settings. The build explicitly clears the GitHub Pages path prefix and requires `out/index.html` before publishing. The Next.js runtime plugin is disabled because this deployment consists entirely of static files.
+
+For an existing site, deploy the latest `main` commit using **Deploys → Trigger deploy → Clear cache and deploy site**. Check the log shows a Next.js production build and publishing from `apps/web/out`. A log saying **No build steps found** and deploying from `/` means Netlify published the source repository rather than the website; check that the latest commit includes the root configuration and that Netlify is building the connected `main` branch. Do not set a different configuration-file path in the site settings.
+
+Open the production domain (for example `raglab-demo.netlify.app`) after the new deployment succeeds. Old deploy-specific URLs stay attached to their old artifacts and will continue to show the old 404. No SPA redirect is needed: Next.js exports an actual root `index.html` and a `/demo/index.html` page.
+
 ## GitHub Pages
 
 1. In the repository's **Settings → Pages**, choose **GitHub Actions** as the source. Confirm the repository/plan permits Pages.

@@ -1,0 +1,10 @@
+[build]
+  base = "apps/web"
+  command = "NEXT_PUBLIC_DEMO_ONLY=true NEXT_PUBLIC_BASE_PATH= npm run build && test -f out/index.html"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_PUBLIC_DEMO_ONLY = "true"
+  NEXT_PUBLIC_BASE_PATH = ""
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
