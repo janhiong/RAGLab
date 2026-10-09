@@ -6,7 +6,9 @@ A local experimentation platform for retrieval-augmented generation. Upload docu
 
 **Implemented in milestone 3:** opt-in Ollama generation, grounded answers with source references, abstention, and persisted query traces.
 
-**Not implemented yet:** benchmark datasets/worker, model comparison, or measured quality metrics. Search returns source evidence; the playground generates answers only when a local model is available. No benchmark scores are fabricated.
+**Implemented in milestone 4:** versioned dataset import, a durable evaluation worker, retrieval/latency/failure metrics, manual answer-review forms, and a real provisional development export.
+
+**Not implemented yet:** controlled model comparison, human-validated labels/holdout results, or deployed public hosting. Search returns source evidence; the playground generates answers only when a local model is available. No benchmark scores are fabricated.
 
 See [the full project plan](docs/project-plan.md) for proposed later milestones.
 
@@ -30,6 +32,7 @@ New database volumes run all migrations automatically. For an existing volume, a
 ```bash
 docker compose exec -T db psql -v ON_ERROR_STOP=1 -U raglab -d raglab < supabase/migrations/0002_ingestion.sql
 docker compose exec -T db psql -v ON_ERROR_STOP=1 -U raglab -d raglab < supabase/migrations/0003_query_traces.sql
+docker compose exec -T db psql -v ON_ERROR_STOP=1 -U raglab -d raglab < supabase/migrations/0004_evaluation.sql
 ```
 
 Start the API in a terminal with the virtualenv activated:
@@ -127,6 +130,36 @@ OLLAMA_DATA_PATH=/workspace/raglab-ollama docker compose --profile generation up
 
 This helper uses the official public registry and verifies each blob's SHA-256 and byte count before publishing its manifest. TLS verification stays enabled; failed downloads are not accepted. Use the same `OLLAMA_DATA_PATH` on later compose commands so the model volume stays consistent. Model tags can change upstream; actual loaded manifest digests are recorded in each trace.
 
+## Run evaluation (milestone 4)
+
+See [evaluation methodology](docs/evaluation.md) for denominators, draft-label limitations, review rubrics, and restart behavior.
+
+1. Upload `sample-corpus/retrieval-notes.md` using the dashboard. Copy its document ID from `GET /documents` or the API docs.
+2. With the API virtualenv active, import the starter labels from the repository root:
+
+   ```bash
+   python scripts/import_dataset.py datasets/retrieval-notes-draft.json --document-id DOCUMENT_UUID
+   ```
+
+3. Refresh the Evaluation panel, select the dataset, and queue a **retrieval-only / keyword / development** run. Draft-label runs display a provisional warning; holdout requires manually reviewed labels.
+4. Run the worker from `apps/api`:
+
+   ```bash
+   python -m app.evaluation.worker --drain
+   ```
+
+   This processes queued runs sequentially and exits when the queue is empty. To process one specific queued run, use `--run-id RUN_UUID`; without arguments it processes at most one queued run. The UI polls selected queued/running runs and shows persisted results.
+5. Inspect per-question references, retrieved chunks, errors, and metrics. Cancel queued/running runs from the UI. Generation runs require the working Ollama setup; answer scores remain **Not measured** until reviewed with a rationale.
+6. From the repository root, export a terminal run to a new file:
+
+   ```bash
+   python scripts/export_experiment.py RUN_UUID --output benchmarks/my-run.json
+   ```
+
+   Export refuses to overwrite an existing file. It preserves the dataset, configuration, per-question results, and observed metrics. Keep user-uploaded private content out of public commits.
+
+The checked-in keyword development export is an actual measurement on **draft** labels. It is not a validated quality claim. The starter dataset needs your manual review before holdout evaluation.
+
 ## Validate
 
 ```bash
@@ -168,6 +201,9 @@ npm run typecheck
 - `POST /search`: JSON `question`, `document_id`, `strategy` (`keyword`, `vector`, `hybrid`), `top_k` (1–20).
 - `POST /query`: search parameters plus an optional configured `model`; generates a grounded answer.
 - `GET /queries/{trace_id}`: persisted result or failure trace.
+- `POST /datasets`, `GET /datasets`: quote-anchored import and versioned dataset inventory.
+- `POST /experiments`, `GET /experiments/{id}`, `/experiments/{id}/results`: durable run creation, progress, and paginated outcomes.
+- `POST /experiments/{id}/cancel`, `/experiments/{id}/results/{question_id}/review`: cancellation and manual review.
 - `GET /capabilities`, `/overview`, `/experiments`, `/health`, `/ready`.
 
 ## Database and deployment
@@ -178,10 +214,10 @@ This is a local/private application. Set `PRIVATE_UPLOADS_ENABLED=false` before 
 
 ## Current validation
 
-37 tests pass against PostgreSQL, covering ingestion, retrieval, citation validation, abstention, persisted failures, concurrency, provider retry/timeout behavior, and model artifact checksums. Frontend production build and TypeScript checks pass. Browser checks verify the actual unavailable/model-missing states; successful citation rendering and abstention presentation use explicit test fixtures, not a real model.
+46 tests pass against PostgreSQL, covering ingestion, retrieval, citation validation, abstention, persisted failures, concurrency, provider retry/timeout behavior, and model artifact checksums. Frontend production build and TypeScript checks pass. Browser checks verify the actual unavailable/model-missing states; successful citation rendering and abstention presentation use explicit test fixtures, not a real model.
 
 Two real-model tests are explicitly skipped: the MiniLM weight CDN and Ollama weight CDN are blocked by the cloud proxy. Ollama 0.12.6 starts and answers its version/model-list endpoints, but no real LLM answer has been generated here. Review and save the recorded network requirements, retry provisioning, then enable the real-model tests. Do not treat the mocked tests as evidence of model quality or a benchmark.
 
 ## Next milestone
 
-Build a persistent evaluation worker, create manually validated labels, and measure retrieval/answer quality and latency. Model comparisons must use identical materialized context. No deployment or measured quality results are claimed yet.
+Add controlled experiment comparisons and failure analysis. Human review of labels and actual local-model validation remain prerequisites for credible quality claims. No public deployment or validated holdout results are claimed yet.

@@ -3,13 +3,15 @@ import logging
 import psycopg
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from app.db import connect, settings
 from app.documents import router as documents_router
 from app.generation import router as generation_router
 from app.providers.ollama import generation_status
+from app.evaluation.api import router as evaluation_router
 
 logger = logging.getLogger(__name__)
-app = FastAPI(title="RAG Lab API", version="0.3.0")
+app = FastAPI(title="RAG Lab API", version="0.4.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -22,7 +24,7 @@ app.add_middleware(
 def health():
     return {
         "status": "ok",
-        "version": "0.3.0",
+        "version": "0.4.0",
         "generation_enabled": settings.generation_enabled,
     }
 
@@ -43,6 +45,7 @@ def ready():
                 cursor.execute("SELECT count(*) AS count FROM experiments")
                 cursor.fetchone()
                 cursor.execute("SELECT id FROM query_traces LIMIT 0")
+                cursor.execute("SELECT id FROM datasets LIMIT 0")
                 if extension is None:
                     raise RuntimeError("pgvector extension is missing")
     except (psycopg.Error, RuntimeError):
@@ -83,7 +86,7 @@ def experiments():
         with connect() as connection:
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "SELECT id, name, status, created_at FROM experiments ORDER BY created_at DESC LIMIT 100"
+                    "SELECT id, name, status, created_at, aggregate_metrics, configuration, dataset_id FROM experiments ORDER BY created_at DESC LIMIT 100"
                 )
                 return {"items": cursor.fetchall()}
     except psycopg.Error:
@@ -95,3 +98,12 @@ def experiments():
 app.include_router(documents_router)
 
 app.include_router(generation_router)
+
+app.include_router(evaluation_router)
+
+
+@app.exception_handler(psycopg.Error)
+async def database_unavailable(request, exc):
+    return JSONResponse(
+        status_code=503, content={"detail": "Database or migration unavailable"}
+    )

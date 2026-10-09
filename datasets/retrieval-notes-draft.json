@@ -1,0 +1,344 @@
+{
+  "name": "Retrieval notes: draft labels",
+  "reviewed": false,
+  "questions": [
+    {
+      "id": "q01",
+      "question": "What does vector retrieval compare?",
+      "reference_answer": "Question embeddings with document chunk embeddings.",
+      "relevant_quotes": [
+        "Vector retrieval compares embeddings of a question"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q02",
+      "question": "What dimensionality does MiniLM use?",
+      "reference_answer": "384 dimensions.",
+      "relevant_quotes": [
+        "384-dimensional vectors"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q03",
+      "question": "What does cosine similarity measure?",
+      "reference_answer": "The angle between vectors.",
+      "relevant_quotes": [
+        "Cosine similarity measures the angle"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "holdout"
+    },
+    {
+      "id": "q04",
+      "question": "What does higher cosine similarity indicate?",
+      "reference_answer": "Closer representations.",
+      "relevant_quotes": [
+        "a higher similarity indicates closer representations"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q05",
+      "question": "Is similarity a correctness probability?",
+      "reference_answer": "No.",
+      "relevant_quotes": [
+        "not a probability of correctness"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q06",
+      "question": "How does PostgreSQL normalize words?",
+      "reference_answer": "Into lexemes.",
+      "relevant_quotes": [
+        "normalizes words into lexemes"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q07",
+      "question": "What kind of retrieval is full-text search?",
+      "reference_answer": "Lexical retrieval.",
+      "relevant_quotes": [
+        "This baseline is lexical retrieval"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "holdout"
+    },
+    {
+      "id": "q08",
+      "question": "Is ts_rank_cd BM25?",
+      "reference_answer": "No.",
+      "relevant_quotes": [
+        "ts_rank_cd is not BM25"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q09",
+      "question": "Where can keyword search work well?",
+      "reference_answer": "Exact technical terms.",
+      "relevant_quotes": [
+        "effective for exact technical terms"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q10",
+      "question": "What can lexical search miss?",
+      "reference_answer": "Paraphrases.",
+      "relevant_quotes": [
+        "it may miss paraphrases"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q11",
+      "question": "What does RRF combine?",
+      "reference_answer": "Ranked retrieval lists.",
+      "relevant_quotes": [
+        "combines ranked retrieval lists"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "holdout"
+    },
+    {
+      "id": "q12",
+      "question": "What does RRF use for fusion?",
+      "reference_answer": "Reciprocal ranks.",
+      "relevant_quotes": [
+        "using reciprocal ranks"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q13",
+      "question": "Why avoid mixing raw retrieval scores?",
+      "reference_answer": "Their scales differ.",
+      "relevant_quotes": [
+        "have the same scale"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q14",
+      "question": "How should fused matches be deduplicated?",
+      "reference_answer": "By chunk identifier.",
+      "relevant_quotes": [
+        "Deduplicate matches by chunk identifier"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q15",
+      "question": "What does Recall at K measure?",
+      "reference_answer": "Fraction of relevant chunks among the first K retrieved chunks.",
+      "relevant_quotes": [
+        "Recall at K is the fraction of relevant chunks"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "holdout"
+    },
+    {
+      "id": "q16",
+      "question": "What does MRR measure?",
+      "reference_answer": "Reciprocal position of the first relevant chunk.",
+      "relevant_quotes": [
+        "Mean reciprocal rank measures the reciprocal position"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q17",
+      "question": "How should no-relevant-chunk questions be evaluated?",
+      "reference_answer": "Abstention separately.",
+      "relevant_quotes": [
+        "evaluated for abstention separately"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q18",
+      "question": "Should unanswerable questions get zero recall?",
+      "reference_answer": "No, evaluate abstention separately.",
+      "relevant_quotes": [
+        "rather than given zero recall"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q19",
+      "question": "What does a retrieval trace identify?",
+      "reference_answer": "Document, chunk, and PDF page when available.",
+      "relevant_quotes": [
+        "A retrieval trace identifies the document"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "holdout"
+    },
+    {
+      "id": "q20",
+      "question": "Are retrieved chunks generated answers?",
+      "reference_answer": "No, they are evidence.",
+      "relevant_quotes": [
+        "not a generated answer"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q21",
+      "question": "Does a citation ID prove correctness?",
+      "reference_answer": "No.",
+      "relevant_quotes": [
+        "does not prove that an answer is correct"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q22",
+      "question": "How are technical keywords searched?",
+      "reference_answer": "PostgreSQL normalizes words and ranks matching chunks.",
+      "relevant_quotes": [
+        "ranks matching document chunks"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q23",
+      "question": "How is cosine similarity interpreted?",
+      "reference_answer": "Closer vector representations, without a correctness guarantee.",
+      "relevant_quotes": [
+        "closer representations"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "holdout"
+    },
+    {
+      "id": "q24",
+      "question": "What is Reciprocal Rank Fusion?",
+      "reference_answer": "A method for combining ranked retrieval lists.",
+      "relevant_quotes": [
+        "Reciprocal Rank Fusion (RRF)"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q25",
+      "question": "What location metadata can citations include?",
+      "reference_answer": "PDF page when available.",
+      "relevant_quotes": [
+        "PDF page when available"
+      ],
+      "answerable": true,
+      "category": "factual",
+      "split": "development"
+    },
+    {
+      "id": "q26",
+      "question": "What GPU was used for these benchmarks?",
+      "reference_answer": "Not specified.",
+      "relevant_quotes": [],
+      "answerable": false,
+      "category": "unanswerable",
+      "split": "development"
+    },
+    {
+      "id": "q27",
+      "question": "What is the measured accuracy of this system?",
+      "reference_answer": "No measurements are provided.",
+      "relevant_quotes": [],
+      "answerable": false,
+      "category": "unanswerable",
+      "split": "development"
+    },
+    {
+      "id": "q28",
+      "question": "How much does hosting cost per month?",
+      "reference_answer": "Not specified.",
+      "relevant_quotes": [],
+      "answerable": false,
+      "category": "unanswerable",
+      "split": "holdout"
+    },
+    {
+      "id": "q29",
+      "question": "Which Ollama model won the benchmark?",
+      "reference_answer": "No comparison results are provided.",
+      "relevant_quotes": [],
+      "answerable": false,
+      "category": "unanswerable",
+      "split": "development"
+    },
+    {
+      "id": "q30",
+      "question": "How many seconds does indexing take?",
+      "reference_answer": "Not measured in the corpus.",
+      "relevant_quotes": [],
+      "answerable": false,
+      "category": "unanswerable",
+      "split": "development"
+    },
+    {
+      "id": "q31",
+      "question": "What is the production database password?",
+      "reference_answer": "No production password is provided.",
+      "relevant_quotes": [],
+      "answerable": false,
+      "category": "unanswerable",
+      "split": "development"
+    },
+    {
+      "id": "q32",
+      "question": "Which OCR engine is supported?",
+      "reference_answer": "No OCR engine is specified.",
+      "relevant_quotes": [],
+      "answerable": false,
+      "category": "unanswerable",
+      "split": "holdout"
+    }
+  ]
+}

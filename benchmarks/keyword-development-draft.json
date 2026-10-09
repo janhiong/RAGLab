@@ -1,0 +1,1628 @@
+{
+  "schema_version": 1,
+  "run": {
+    "id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+    "name": "Keyword baseline: draft development labels",
+    "status": "completed",
+    "configuration": {
+      "mode": "retrieval",
+      "name": "Keyword baseline: draft development labels",
+      "seed": 42,
+      "model": null,
+      "split": "development",
+      "top_k": 3,
+      "strategy": "keyword",
+      "dataset_id": "76697b04-519c-4efd-8ebe-78b74f48b54a",
+      "document_id": "f517b926-7722-4be8-be28-157a70649859",
+      "temperature": 0,
+      "prompt_version": "grounded-json-v1",
+      "dataset_reviewed": false,
+      "embedding_version": null,
+      "generation_settings": {
+        "max_tokens": 384,
+        "context_chars": 10000,
+        "timeout_seconds": 90.0
+      }
+    },
+    "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+    "dataset_version": "7cb3f8f0632e2832c31b0e5d8038587790fce612933b9eaf3fe68ec45864ecbb",
+    "aggregate_metrics": {
+      "mrr": 0.5789473684210527,
+      "failed": 0,
+      "attempted": 24,
+      "completed": 24,
+      "correctness": null,
+      "recall_at_k": 0.5789473684210527,
+      "failure_rate": 0.0,
+      "faithfulness": null,
+      "latency_p50_ms": 23.825,
+      "latency_p95_ms": 29.8985,
+      "answerable_count": 19,
+      "retrieval_p50_ms": 11.74,
+      "retrieval_p95_ms": 15.87,
+      "generation_p50_ms": null,
+      "generation_p95_ms": null,
+      "unanswerable_count": 5,
+      "abstention_accuracy": null,
+      "manually_reviewed_count": 0,
+      "no_evidence_abstentions": 0,
+      "abstention_evaluated_count": 0
+    },
+    "created_at": "2026-10-09 19:24:20.881367+00:00",
+    "dataset_id": "76697b04-519c-4efd-8ebe-78b74f48b54a",
+    "completed_at": "2026-10-09 19:24:23.041440+00:00",
+    "error": null,
+    "total": 24,
+    "processed": 24
+  },
+  "dataset": {
+    "id": "76697b04-519c-4efd-8ebe-78b74f48b54a",
+    "name": "Retrieval notes: draft labels",
+    "version": "7cb3f8f0632e2832c31b0e5d8038587790fce612933b9eaf3fe68ec45864ecbb",
+    "document_id": "f517b926-7722-4be8-be28-157a70649859",
+    "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+    "reviewed": false,
+    "questions": [
+      {
+        "id": "q01",
+        "split": "development",
+        "category": "factual",
+        "question": "What does vector retrieval compare?",
+        "answerable": true,
+        "relevant_quotes": [
+          "Vector retrieval compares embeddings of a question"
+        ],
+        "reference_answer": "Question embeddings with document chunk embeddings.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q02",
+        "split": "development",
+        "category": "factual",
+        "question": "What dimensionality does MiniLM use?",
+        "answerable": true,
+        "relevant_quotes": [
+          "384-dimensional vectors"
+        ],
+        "reference_answer": "384 dimensions.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q03",
+        "split": "holdout",
+        "category": "factual",
+        "question": "What does cosine similarity measure?",
+        "answerable": true,
+        "relevant_quotes": [
+          "Cosine similarity measures the angle"
+        ],
+        "reference_answer": "The angle between vectors.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q04",
+        "split": "development",
+        "category": "factual",
+        "question": "What does higher cosine similarity indicate?",
+        "answerable": true,
+        "relevant_quotes": [
+          "a higher similarity indicates closer representations"
+        ],
+        "reference_answer": "Closer representations.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q05",
+        "split": "development",
+        "category": "factual",
+        "question": "Is similarity a correctness probability?",
+        "answerable": true,
+        "relevant_quotes": [
+          "not a probability of correctness"
+        ],
+        "reference_answer": "No.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q06",
+        "split": "development",
+        "category": "factual",
+        "question": "How does PostgreSQL normalize words?",
+        "answerable": true,
+        "relevant_quotes": [
+          "normalizes words into lexemes"
+        ],
+        "reference_answer": "Into lexemes.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q07",
+        "split": "holdout",
+        "category": "factual",
+        "question": "What kind of retrieval is full-text search?",
+        "answerable": true,
+        "relevant_quotes": [
+          "This baseline is lexical retrieval"
+        ],
+        "reference_answer": "Lexical retrieval.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q08",
+        "split": "development",
+        "category": "factual",
+        "question": "Is ts_rank_cd BM25?",
+        "answerable": true,
+        "relevant_quotes": [
+          "ts_rank_cd is not BM25"
+        ],
+        "reference_answer": "No.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q09",
+        "split": "development",
+        "category": "factual",
+        "question": "Where can keyword search work well?",
+        "answerable": true,
+        "relevant_quotes": [
+          "effective for exact technical terms"
+        ],
+        "reference_answer": "Exact technical terms.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q10",
+        "split": "development",
+        "category": "factual",
+        "question": "What can lexical search miss?",
+        "answerable": true,
+        "relevant_quotes": [
+          "it may miss paraphrases"
+        ],
+        "reference_answer": "Paraphrases.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q11",
+        "split": "holdout",
+        "category": "factual",
+        "question": "What does RRF combine?",
+        "answerable": true,
+        "relevant_quotes": [
+          "combines ranked retrieval lists"
+        ],
+        "reference_answer": "Ranked retrieval lists.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q12",
+        "split": "development",
+        "category": "factual",
+        "question": "What does RRF use for fusion?",
+        "answerable": true,
+        "relevant_quotes": [
+          "using reciprocal ranks"
+        ],
+        "reference_answer": "Reciprocal ranks.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q13",
+        "split": "development",
+        "category": "factual",
+        "question": "Why avoid mixing raw retrieval scores?",
+        "answerable": true,
+        "relevant_quotes": [
+          "have the same scale"
+        ],
+        "reference_answer": "Their scales differ.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q14",
+        "split": "development",
+        "category": "factual",
+        "question": "How should fused matches be deduplicated?",
+        "answerable": true,
+        "relevant_quotes": [
+          "Deduplicate matches by chunk identifier"
+        ],
+        "reference_answer": "By chunk identifier.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q15",
+        "split": "holdout",
+        "category": "factual",
+        "question": "What does Recall at K measure?",
+        "answerable": true,
+        "relevant_quotes": [
+          "Recall at K is the fraction of relevant chunks"
+        ],
+        "reference_answer": "Fraction of relevant chunks among the first K retrieved chunks.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q16",
+        "split": "development",
+        "category": "factual",
+        "question": "What does MRR measure?",
+        "answerable": true,
+        "relevant_quotes": [
+          "Mean reciprocal rank measures the reciprocal position"
+        ],
+        "reference_answer": "Reciprocal position of the first relevant chunk.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de",
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      {
+        "id": "q17",
+        "split": "development",
+        "category": "factual",
+        "question": "How should no-relevant-chunk questions be evaluated?",
+        "answerable": true,
+        "relevant_quotes": [
+          "evaluated for abstention separately"
+        ],
+        "reference_answer": "Abstention separately.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de",
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      {
+        "id": "q18",
+        "split": "development",
+        "category": "factual",
+        "question": "Should unanswerable questions get zero recall?",
+        "answerable": true,
+        "relevant_quotes": [
+          "rather than given zero recall"
+        ],
+        "reference_answer": "No, evaluate abstention separately.",
+        "relevant_chunk_ids": [
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      {
+        "id": "q19",
+        "split": "holdout",
+        "category": "factual",
+        "question": "What does a retrieval trace identify?",
+        "answerable": true,
+        "relevant_quotes": [
+          "A retrieval trace identifies the document"
+        ],
+        "reference_answer": "Document, chunk, and PDF page when available.",
+        "relevant_chunk_ids": [
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      {
+        "id": "q20",
+        "split": "development",
+        "category": "factual",
+        "question": "Are retrieved chunks generated answers?",
+        "answerable": true,
+        "relevant_quotes": [
+          "not a generated answer"
+        ],
+        "reference_answer": "No, they are evidence.",
+        "relevant_chunk_ids": [
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      {
+        "id": "q21",
+        "split": "development",
+        "category": "factual",
+        "question": "Does a citation ID prove correctness?",
+        "answerable": true,
+        "relevant_quotes": [
+          "does not prove that an answer is correct"
+        ],
+        "reference_answer": "No.",
+        "relevant_chunk_ids": [
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      {
+        "id": "q22",
+        "split": "development",
+        "category": "factual",
+        "question": "How are technical keywords searched?",
+        "answerable": true,
+        "relevant_quotes": [
+          "ranks matching document chunks"
+        ],
+        "reference_answer": "PostgreSQL normalizes words and ranks matching chunks.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q23",
+        "split": "holdout",
+        "category": "factual",
+        "question": "How is cosine similarity interpreted?",
+        "answerable": true,
+        "relevant_quotes": [
+          "closer representations"
+        ],
+        "reference_answer": "Closer vector representations, without a correctness guarantee.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q24",
+        "split": "development",
+        "category": "factual",
+        "question": "What is Reciprocal Rank Fusion?",
+        "answerable": true,
+        "relevant_quotes": [
+          "Reciprocal Rank Fusion (RRF)"
+        ],
+        "reference_answer": "A method for combining ranked retrieval lists.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      {
+        "id": "q25",
+        "split": "development",
+        "category": "factual",
+        "question": "What location metadata can citations include?",
+        "answerable": true,
+        "relevant_quotes": [
+          "PDF page when available"
+        ],
+        "reference_answer": "PDF page when available.",
+        "relevant_chunk_ids": [
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      {
+        "id": "q26",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "What GPU was used for these benchmarks?",
+        "answerable": false,
+        "relevant_quotes": [],
+        "reference_answer": "Not specified.",
+        "relevant_chunk_ids": []
+      },
+      {
+        "id": "q27",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "What is the measured accuracy of this system?",
+        "answerable": false,
+        "relevant_quotes": [],
+        "reference_answer": "No measurements are provided.",
+        "relevant_chunk_ids": []
+      },
+      {
+        "id": "q28",
+        "split": "holdout",
+        "category": "unanswerable",
+        "question": "How much does hosting cost per month?",
+        "answerable": false,
+        "relevant_quotes": [],
+        "reference_answer": "Not specified.",
+        "relevant_chunk_ids": []
+      },
+      {
+        "id": "q29",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "Which Ollama model won the benchmark?",
+        "answerable": false,
+        "relevant_quotes": [],
+        "reference_answer": "No comparison results are provided.",
+        "relevant_chunk_ids": []
+      },
+      {
+        "id": "q30",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "How many seconds does indexing take?",
+        "answerable": false,
+        "relevant_quotes": [],
+        "reference_answer": "Not measured in the corpus.",
+        "relevant_chunk_ids": []
+      },
+      {
+        "id": "q31",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "What is the production database password?",
+        "answerable": false,
+        "relevant_quotes": [],
+        "reference_answer": "No production password is provided.",
+        "relevant_chunk_ids": []
+      },
+      {
+        "id": "q32",
+        "split": "holdout",
+        "category": "unanswerable",
+        "question": "Which OCR engine is supported?",
+        "answerable": false,
+        "relevant_quotes": [],
+        "reference_answer": "No OCR engine is specified.",
+        "relevant_chunk_ids": []
+      }
+    ],
+    "created_at": "2026-10-09 19:22:13.784197+00:00"
+  },
+  "results": [
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q01",
+      "status": "completed",
+      "question": {
+        "id": "q01",
+        "split": "development",
+        "category": "factual",
+        "question": "What does vector retrieval compare?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "Vector retrieval compares embeddings of a question"
+        ],
+        "reference_answer": "Question embeddings with document chunk embeddings.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.106587306,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "What does vector retrieval compare?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.6,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 11.6,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 25.64,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q02",
+      "status": "completed",
+      "question": {
+        "id": "q02",
+        "split": "development",
+        "category": "factual",
+        "question": "What dimensionality does MiniLM use?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "384-dimensional vectors"
+        ],
+        "reference_answer": "384 dimensions.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.0011904762,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "What dimensionality does MiniLM use?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 16.23,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 16.23,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 40.55,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q04",
+      "status": "completed",
+      "question": {
+        "id": "q04",
+        "split": "development",
+        "category": "factual",
+        "question": "What does higher cosine similarity indicate?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "a higher similarity indicates closer representations"
+        ],
+        "reference_answer": "Closer representations.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.014285714,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "What does higher cosine similarity indicate?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 15.36,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 15.36,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 26.77,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q05",
+      "status": "completed",
+      "question": {
+        "id": "q05",
+        "split": "development",
+        "category": "factual",
+        "question": "Is similarity a correctness probability?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "not a probability of correctness"
+        ],
+        "reference_answer": "No.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.011515152,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "Is similarity a correctness probability?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 14.64,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 14.64,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 28.14,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q06",
+      "status": "completed",
+      "question": {
+        "id": "q06",
+        "split": "development",
+        "category": "factual",
+        "question": "How does PostgreSQL normalize words?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "normalizes words into lexemes"
+        ],
+        "reference_answer": "Into lexemes.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.027692309,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "How does PostgreSQL normalize words?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 13.96,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 13.96,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 30.17,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q08",
+      "status": "completed",
+      "question": {
+        "id": "q08",
+        "split": "development",
+        "category": "factual",
+        "question": "Is ts_rank_cd BM25?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "ts_rank_cd is not BM25"
+        ],
+        "reference_answer": "No.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.033333335,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "Is ts_rank_cd BM25?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.01,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 11.01,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 23.64,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q09",
+      "status": "completed",
+      "question": {
+        "id": "q09",
+        "split": "development",
+        "category": "factual",
+        "question": "Where can keyword search work well?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "effective for exact technical terms"
+        ],
+        "reference_answer": "Exact technical terms.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "Where can keyword search work well?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.48,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 0.0,
+        "retrieval_ms": 11.48,
+        "generation_ms": null,
+        "reciprocal_rank": 0.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 23.75,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q10",
+      "status": "completed",
+      "question": {
+        "id": "q10",
+        "split": "development",
+        "category": "factual",
+        "question": "What can lexical search miss?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "it may miss paraphrases"
+        ],
+        "reference_answer": "Paraphrases.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.0029411765,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "What can lexical search miss?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.51,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 11.51,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 22.53,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q12",
+      "status": "completed",
+      "question": {
+        "id": "q12",
+        "split": "development",
+        "category": "factual",
+        "question": "What does RRF use for fusion?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "using reciprocal ranks"
+        ],
+        "reference_answer": "Reciprocal ranks.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.02,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "What does RRF use for fusion?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 15.96,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 15.96,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 27.19,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q13",
+      "status": "completed",
+      "question": {
+        "id": "q13",
+        "split": "development",
+        "category": "factual",
+        "question": "Why avoid mixing raw retrieval scores?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "have the same scale"
+        ],
+        "reference_answer": "Their scales differ.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "Why avoid mixing raw retrieval scores?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.93,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 0.0,
+        "retrieval_ms": 11.93,
+        "generation_ms": null,
+        "reciprocal_rank": 0.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 23.33,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q14",
+      "status": "completed",
+      "question": {
+        "id": "q14",
+        "split": "development",
+        "category": "factual",
+        "question": "How should fused matches be deduplicated?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "Deduplicate matches by chunk identifier"
+        ],
+        "reference_answer": "By chunk identifier.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "How should fused matches be deduplicated?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.6,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 0.0,
+        "retrieval_ms": 11.6,
+        "generation_ms": null,
+        "reciprocal_rank": 0.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 23.9,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q16",
+      "status": "completed",
+      "question": {
+        "id": "q16",
+        "split": "development",
+        "category": "factual",
+        "question": "What does MRR measure?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "Mean reciprocal rank measures the reciprocal position"
+        ],
+        "reference_answer": "Reciprocal position of the first relevant chunk.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de",
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "What does MRR measure?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.88,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 0.0,
+        "retrieval_ms": 11.88,
+        "generation_ms": null,
+        "reciprocal_rank": 0.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 24.32,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q17",
+      "status": "completed",
+      "question": {
+        "id": "q17",
+        "split": "development",
+        "category": "factual",
+        "question": "How should no-relevant-chunk questions be evaluated?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "evaluated for abstention separately"
+        ],
+        "reference_answer": "Abstention separately.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de",
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "How should no-relevant-chunk questions be evaluated?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 13.77,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 0.0,
+        "retrieval_ms": 13.77,
+        "generation_ms": null,
+        "reciprocal_rank": 0.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 25.29,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q18",
+      "status": "completed",
+      "question": {
+        "id": "q18",
+        "split": "development",
+        "category": "factual",
+        "question": "Should unanswerable questions get zero recall?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "rather than given zero recall"
+        ],
+        "reference_answer": "No, evaluate abstention separately.",
+        "relevant_chunk_ids": [
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "Should unanswerable questions get zero recall?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 10.13,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 0.0,
+        "retrieval_ms": 10.13,
+        "generation_ms": null,
+        "reciprocal_rank": 0.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 21.83,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q20",
+      "status": "completed",
+      "question": {
+        "id": "q20",
+        "split": "development",
+        "category": "factual",
+        "question": "Are retrieved chunks generated answers?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "not a generated answer"
+        ],
+        "reference_answer": "No, they are evidence.",
+        "relevant_chunk_ids": [
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "e894eac9-628a-4aaf-99e3-c135826e20f7",
+            "page": null,
+            "rank": 1,
+            "score": 0.007142857,
+            "content": "first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given zero recall. ## Citations A retrieval trace identifies the document, chunk, and PDF page when available. Returning relevant evidence is a retrieval result, not a generated answer. A citation identifier alone does not prove that an answer is correct or supported.",
+            "filename": "retrieval-notes.md",
+            "citation_id": "e894eac9-628a-4aaf-99e3-c135826e20f7",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "Are retrieved chunks generated answers?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.99,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 11.99,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 23.03,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q21",
+      "status": "completed",
+      "question": {
+        "id": "q21",
+        "split": "development",
+        "category": "factual",
+        "question": "Does a citation ID prove correctness?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "does not prove that an answer is correct"
+        ],
+        "reference_answer": "No.",
+        "relevant_chunk_ids": [
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "Does a citation ID prove correctness?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 10.87,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 0.0,
+        "retrieval_ms": 10.87,
+        "generation_ms": null,
+        "reciprocal_rank": 0.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 21.08,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q22",
+      "status": "completed",
+      "question": {
+        "id": "q22",
+        "split": "development",
+        "category": "factual",
+        "question": "How are technical keywords searched?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "ranks matching document chunks"
+        ],
+        "reference_answer": "PostgreSQL normalizes words and ranks matching chunks.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.0034482758,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "How are technical keywords searched?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 13.48,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 13.48,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 26.17,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q24",
+      "status": "completed",
+      "question": {
+        "id": "q24",
+        "split": "development",
+        "category": "factual",
+        "question": "What is Reciprocal Rank Fusion?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "Reciprocal Rank Fusion (RRF)"
+        ],
+        "reference_answer": "A method for combining ranked retrieval lists.",
+        "relevant_chunk_ids": [
+          "11a29245-9866-46f0-97f1-a6f1b31121de"
+        ]
+      },
+      "retrieval": {
+        "items": [
+          {
+            "id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "page": null,
+            "rank": 1,
+            "score": 0.11666667,
+            "content": "# RAG Lab retrieval notes This original sample document is supplied under the CC0 1.0 public-domain dedication. ## Vector retrieval Vector retrieval compares embeddings of a question with embeddings of document chunks. The all-MiniLM-L6-v2 model produces 384-dimensional vectors. Cosine similarity measures the angle between vectors; a higher similarity indicates closer representations, but it is not a probability of correctness. ## PostgreSQL full-text search PostgreSQL full-text search normalizes words into lexemes and ranks matching document chunks. This baseline is lexical retrieval. PostgreSQL ts_rank_cd is not BM25. A keyword strategy can be effective for exact technical terms, but it may miss paraphrases. ## Hybrid retrieval Reciprocal Rank Fusion (RRF) combines ranked retrieval lists using reciprocal ranks. It avoids assuming that vector similarity and keyword ranking scores have the same scale. Deduplicate matches by chunk identifier when combining lists. ## Evaluation Recall at K is the fraction of relevant chunks present among the first K retrieved chunks. Mean reciprocal rank measures the reciprocal position of the first relevant chunk. Questions with no relevant chunks should be evaluated for abstention separately rather than given",
+            "filename": "retrieval-notes.md",
+            "citation_id": "11a29245-9866-46f0-97f1-a6f1b31121de",
+            "document_id": "f517b926-7722-4be8-be28-157a70649859"
+          }
+        ],
+        "top_k": 3,
+        "question": "What is Reciprocal Rank Fusion?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 12.59,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 1.0,
+        "retrieval_ms": 12.59,
+        "generation_ms": null,
+        "reciprocal_rank": 1.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 25.72,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q25",
+      "status": "completed",
+      "question": {
+        "id": "q25",
+        "split": "development",
+        "category": "factual",
+        "question": "What location metadata can citations include?",
+        "answerable": true,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [
+          "PDF page when available"
+        ],
+        "reference_answer": "PDF page when available.",
+        "relevant_chunk_ids": [
+          "e894eac9-628a-4aaf-99e3-c135826e20f7"
+        ]
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "What location metadata can citations include?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 10.05,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": 0.0,
+        "retrieval_ms": 10.05,
+        "generation_ms": null,
+        "reciprocal_rank": 0.0,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 20.75,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q26",
+      "status": "completed",
+      "question": {
+        "id": "q26",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "What GPU was used for these benchmarks?",
+        "answerable": false,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [],
+        "reference_answer": "Not specified.",
+        "relevant_chunk_ids": []
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "What GPU was used for these benchmarks?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 10.47,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": null,
+        "retrieval_ms": 10.47,
+        "generation_ms": null,
+        "reciprocal_rank": null,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 22.59,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q27",
+      "status": "completed",
+      "question": {
+        "id": "q27",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "What is the measured accuracy of this system?",
+        "answerable": false,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [],
+        "reference_answer": "No measurements are provided.",
+        "relevant_chunk_ids": []
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "What is the measured accuracy of this system?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.54,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": null,
+        "retrieval_ms": 11.54,
+        "generation_ms": null,
+        "reciprocal_rank": null,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 23.65,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q29",
+      "status": "completed",
+      "question": {
+        "id": "q29",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "Which Ollama model won the benchmark?",
+        "answerable": false,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [],
+        "reference_answer": "No comparison results are provided.",
+        "relevant_chunk_ids": []
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "Which Ollama model won the benchmark?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 14.44,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": null,
+        "retrieval_ms": 14.44,
+        "generation_ms": null,
+        "reciprocal_rank": null,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 28.36,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q30",
+      "status": "completed",
+      "question": {
+        "id": "q30",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "How many seconds does indexing take?",
+        "answerable": false,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [],
+        "reference_answer": "Not measured in the corpus.",
+        "relevant_chunk_ids": []
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "How many seconds does indexing take?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 10.99,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": null,
+        "retrieval_ms": 10.99,
+        "generation_ms": null,
+        "reciprocal_rank": null,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 22.47,
+      "error": null,
+      "review": null
+    },
+    {
+      "experiment_id": "f883c9dc-7059-4820-bd67-61e2e93bf8e4",
+      "question_id": "q31",
+      "status": "completed",
+      "question": {
+        "id": "q31",
+        "split": "development",
+        "category": "unanswerable",
+        "question": "What is the production database password?",
+        "answerable": false,
+        "evaluation_mode": "retrieval",
+        "relevant_quotes": [],
+        "reference_answer": "No production password is provided.",
+        "relevant_chunk_ids": []
+      },
+      "retrieval": {
+        "items": [],
+        "top_k": 3,
+        "question": "What is the production database password?",
+        "strategy": "keyword",
+        "score_type": "postgresql_ts_rank_cd",
+        "retrieval_ms": 11.05,
+        "corpus_version": "1e85e4f71f6674b6bb845ff549e4835a64d13091942929884be13600b1988197",
+        "live_generation": false,
+        "chunking_version": "whitespace-v1-180-30",
+        "embedding_version": null
+      },
+      "answer": null,
+      "metrics": {
+        "recall_at_k": null,
+        "retrieval_ms": 11.05,
+        "generation_ms": null,
+        "reciprocal_rank": null,
+        "abstention_correct": null
+      },
+      "elapsed_ms": 21.94,
+      "error": null,
+      "review": null
+    }
+  ]
+}
