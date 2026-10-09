@@ -1,6 +1,7 @@
 """Sequential durable worker. One worker per database; interrupted runs fail explicitly."""
 
 import argparse
+import hashlib
 import json
 from time import perf_counter
 from uuid import UUID
@@ -11,7 +12,14 @@ from psycopg.types.json import Jsonb
 from app.db import connect, settings
 from app.documents import SearchRequest, search
 from app.evaluation.metrics import aggregate, retrieval_metrics
-from app.generation import QueryRequest, query
+from app.generation import (
+    QueryRequest,
+    query,
+    execute_query,
+    PROMPT_VERSION,
+    SYSTEM_PROMPT,
+    prepare_context,
+)
 
 WORKER_LOCK = 724104
 
@@ -80,6 +88,12 @@ def recover_interrupted():
 
 def process(run):
     config = run["configuration"]
+    if config.get("frozen_inputs") is not None and (
+        config.get("prompt_version") != PROMPT_VERSION
+        or config.get("system_prompt") != SYSTEM_PROMPT
+    ):
+        finish(run["id"], "failed", "Frozen prompt changed after queueing.")
+        return
     if config["mode"] == "generation" and config.get("generation_settings") != {
         "max_tokens": settings.generation_max_tokens,
         "context_chars": settings.generation_context_chars,
@@ -87,6 +101,17 @@ def process(run):
     }:
         finish(run["id"], "failed", "Generation configuration changed after queueing.")
         return
+    if config.get("frozen_inputs") is not None:
+        contexts = {
+            key: prepare_context(value["items"], settings.generation_context_chars)
+            for key, value in config["frozen_inputs"].items()
+        }
+        fingerprint = hashlib.sha256(
+            json.dumps(contexts, sort_keys=True, ensure_ascii=False).encode()
+        ).hexdigest()
+        if fingerprint != config.get("context_sha256"):
+            finish(run["id"], "failed", "Frozen context changed after queueing.")
+            return
     with connect() as c:
         dataset = c.execute(
             "SELECT * FROM datasets WHERE id=%s", (run["dataset_id"],)
@@ -135,11 +160,19 @@ def process(run):
                 "document_id": dataset["document_id"],
                 "strategy": config["strategy"],
                 "top_k": config["top_k"],
+                "keyword_mode": config.get("keyword_mode", "websearch"),
             }
             if config["mode"] == "retrieval":
                 retrieval = search(SearchRequest(**arguments))
             else:
-                answer = query(QueryRequest(**arguments, model=config["model"]))
+                if config.get("frozen_inputs") is not None:
+                    retrieval = config["frozen_inputs"][question["id"]]
+                    answer = execute_query(
+                        QueryRequest(**arguments, model=config["model"]),
+                        frozen_retrieval=retrieval,
+                    )
+                else:
+                    answer = query(QueryRequest(**arguments, model=config["model"]))
                 with connect() as c:
                     retrieval = c.execute(
                         "SELECT retrieval FROM query_traces WHERE id=%s",

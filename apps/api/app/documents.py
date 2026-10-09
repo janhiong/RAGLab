@@ -199,6 +199,7 @@ class SearchRequest(BaseModel):
     document_id: UUID
     strategy: Literal["keyword", "vector", "hybrid"] = "keyword"
     top_k: int = Field(default=5, ge=1, le=20)
+    keyword_mode: Literal["websearch", "any_term"] = "websearch"
 
 
 @router.post("/search")
@@ -218,8 +219,11 @@ def search(request: SearchRequest):
             keyword = []
             vector = []
             if request.strategy in ("keyword", "hybrid"):
+                query_expression = "websearch_to_tsquery('english', %s)"
+                if request.keyword_mode == "any_term":
+                    query_expression = "to_tsquery('english', (SELECT string_agg(quote_literal(term), ' | ') FROM unnest(tsvector_to_array(to_tsvector('english', %s))) AS term))"
                 keyword = connection.execute(
-                    "SELECT id, document_id, content, page, ts_rank_cd(search_vector, websearch_to_tsquery('english', %s)) AS score FROM chunks WHERE document_id = %s AND search_vector @@ websearch_to_tsquery('english', %s) ORDER BY score DESC, id LIMIT %s",
+                    f"SELECT id, document_id, content, page, ts_rank_cd(search_vector, {query_expression}) AS score FROM chunks WHERE document_id = %s AND search_vector @@ {query_expression} ORDER BY score DESC, id LIMIT %s",
                     (request.question, request.document_id, request.question, limit),
                 ).fetchall()
             if request.strategy in ("vector", "hybrid"):
@@ -246,6 +250,7 @@ def search(request: SearchRequest):
                 "question": request.question,
                 "strategy": request.strategy,
                 "top_k": request.top_k,
+                "keyword_mode": request.keyword_mode,
                 "corpus_version": doc["corpus_version"],
                 "chunking_version": doc["chunking_version"],
                 "embedding_version": (

@@ -1,3 +1,4 @@
+import hashlib
 import json
 import re
 from threading import BoundedSemaphore
@@ -112,6 +113,10 @@ def update_trace(trace_id, **fields):
 
 @router.post("/query")
 def query(request: QueryRequest):
+    return execute_query(request)
+
+
+def execute_query(request: QueryRequest, frozen_retrieval=None):
     if not settings.generation_enabled:
         raise HTTPException(
             status_code=503,
@@ -138,6 +143,7 @@ def query(request: QueryRequest):
             "model": model,
             "strategy": request.strategy,
             "top_k": request.top_k,
+            "keyword_mode": request.keyword_mode,
             "prompt_version": PROMPT_VERSION,
             "temperature": 0,
             "seed": 42,
@@ -167,7 +173,9 @@ def query(request: QueryRequest):
                 status_code=503, detail="Query trace storage is unavailable."
             ) from None
         trace_created = True
-        retrieval = search(request)
+        retrieval = (
+            frozen_retrieval if frozen_retrieval is not None else search(request)
+        )
         context = prepare_context(retrieval["items"], settings.generation_context_chars)
         update_trace(trace_id, retrieval=retrieval, context=context)
         if retrieval["items"] and not context:
@@ -208,6 +216,14 @@ def query(request: QueryRequest):
             schema["properties"]["citations"]["items"]["enum"] = [
                 item["citation_id"] for item in context
             ]
+            configuration["input_sha256"] = hashlib.sha256(
+                json.dumps(
+                    {"messages": messages, "schema": schema},
+                    sort_keys=True,
+                    ensure_ascii=False,
+                ).encode()
+            ).hexdigest()
+            update_trace(trace_id, configuration=configuration)
             generation_started = perf_counter()
             generated = generate(settings, model, messages, schema)
             generation_ms = round((perf_counter() - generation_started) * 1000, 2)
@@ -245,6 +261,7 @@ def query(request: QueryRequest):
             "total_ms": round((perf_counter() - started) * 1000, 2),
             "citation_validation": "source_ids_only",
             "context": context,
+            "input_sha256": configuration.get("input_sha256"),
         }
         update_trace(
             trace_id,

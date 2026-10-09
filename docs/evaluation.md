@@ -38,7 +38,7 @@ The API queues runs; it does not perform benchmark work in request handlers. A C
 
 On restart, the sole worker marks interrupted `running` runs `failed` and preserves their results. It does not silently remove failures or repeat partial model calls. Create a new run to retry. Queued runs remain queued. Infrastructure failures mark a run failed and cause a nonzero worker exit; ordinary question failures are retained and the run finishes `completed` with a nonzero failure count.
 
-Corpus and embedding versions are checked before execution. Generation budgets are recorded and changes between queueing and execution fail the run explicitly. Model tags/digests and prompts are stored in the per-question query traces. Comparison of two models on identical materialized context belongs to milestone 5; do not treat separate runs as that controlled comparison yet.
+Corpus and embedding versions are checked before execution. Generation budgets are recorded and changes between queueing and execution fail the run explicitly. Model tags/digests and prompts are stored in the per-question query traces. Milestone 5 supports [controlled comparisons using materialized context](comparison.md); ordinary separately retrieved generation runs do not establish that control.
 
 ## Actual development export
 

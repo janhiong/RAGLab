@@ -9,9 +9,10 @@ from app.documents import router as documents_router
 from app.generation import router as generation_router
 from app.providers.ollama import generation_status
 from app.evaluation.api import router as evaluation_router
+from app.evaluation.comparison import router as comparison_router
 
 logger = logging.getLogger(__name__)
-app = FastAPI(title="RAG Lab API", version="0.4.0")
+app = FastAPI(title="RAG Lab API", version="0.5.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -24,7 +25,7 @@ app.add_middleware(
 def health():
     return {
         "status": "ok",
-        "version": "0.4.0",
+        "version": "0.5.0",
         "generation_enabled": settings.generation_enabled,
     }
 
@@ -86,7 +87,7 @@ def experiments():
         with connect() as connection:
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "SELECT id, name, status, created_at, aggregate_metrics, configuration, dataset_id FROM experiments ORDER BY created_at DESC LIMIT 100"
+                    "SELECT id, name, status, created_at, aggregate_metrics, configuration - 'frozen_inputs' AS configuration, dataset_id FROM experiments ORDER BY created_at DESC LIMIT 100"
                 )
                 return {"items": cursor.fetchall()}
     except psycopg.Error:
@@ -100,6 +101,7 @@ app.include_router(documents_router)
 app.include_router(generation_router)
 
 app.include_router(evaluation_router)
+app.include_router(comparison_router)
 
 
 @app.exception_handler(psycopg.Error)

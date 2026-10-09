@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { request, type Overview, type Experiment } from "../lib/api";
 import CorpusWorkspace from "../components/CorpusWorkspace";
 import RAGPlayground from "../components/RAGPlayground";
+import ComparisonWorkspace from "../components/ComparisonWorkspace";
 import EvaluationWorkspace from "../components/EvaluationWorkspace";
 
 export default function Dashboard() {
@@ -46,6 +47,7 @@ export default function Dashboard() {
           <a href="#documents">Documents & search</a>
           <a href="#playground">Playground</a>
           <a href="#evaluation">Evaluation</a>
+          <a href="#comparison">Compare & diagnose</a>
           <a href="#experiments">Experiments</a>
           <a href="#roadmap">Roadmap</a>
         </nav>
@@ -103,6 +105,7 @@ export default function Dashboard() {
         <CorpusWorkspace onChange={() => void load()} />
         <RAGPlayground />
         <EvaluationWorkspace />
+        <ComparisonWorkspace />
         <section id="experiments">
           <div className="section-heading">
             <div>

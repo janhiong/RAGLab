@@ -262,3 +262,119 @@ def test_evaluation_writes_disabled_in_read_only_mode(dataset, monkeypatch):
         == 403
     )
     assert client.post(f"/experiments/{run_id}/cancel").status_code == 403
+
+
+def test_comparison_coverage_versions_and_failure_drilldown(dataset):
+    a = queue(dataset)
+    b = queue(dataset, top_k=1)
+    work(a)
+    work(b)
+    response = client.get(f"/comparisons?baseline={a}&candidate={b}")
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["complete_coverage"] and not data["controlled_context"]
+    assert data["deltas"]["recall_at_k"] == 0
+    assert data["deltas"]["correctness"] is None and not data["reviewed_labels"]
+    with psycopg.connect(settings.database_url) as c:
+        c.execute(
+            "DELETE FROM experiment_results WHERE experiment_id=%s AND question_id=%s",
+            (b, "a"),
+        )
+    data = client.get(f"/comparisons?baseline={a}&candidate={b}").json()
+    assert not data["complete_coverage"] and all(
+        value is None for value in data["deltas"].values()
+    )
+    assert data["questions"][0]["candidate_failures"] == ["not_attempted"]
+    with psycopg.connect(settings.database_url) as c:
+        c.execute("UPDATE experiments SET corpus_version='different' WHERE id=%s", (b,))
+    assert client.get(f"/comparisons?baseline={a}&candidate={b}").status_code == 422
+
+
+def test_frozen_model_inputs_and_failure_denominators(dataset, monkeypatch):
+    source = queue(dataset)
+    work(source)
+    monkeypatch.setattr(settings, "generation_enabled", True)
+    monkeypatch.setattr(settings, "ollama_models", ["model-a", "model-b"])
+    monkeypatch.setattr(
+        "app.generation.installed_models",
+        lambda url: {"model-a": "digest-a", "model-b": "digest-b"},
+    )
+    calls = []
+
+    def generate(settings, model, messages, schema):
+        calls.append((model, messages, schema))
+        return {
+            "content": json.dumps(
+                {"answer": "Angles [S1]", "citations": ["S1"], "abstained": False}
+            ),
+            "attempts": 1,
+            "token_usage": {"eval_count": 5},
+        }
+
+    monkeypatch.setattr("app.generation.generate", generate)
+    response = client.post(
+        "/model-comparisons",
+        json={"source_run_id": source, "models": ["model-a", "model-b"]},
+    )
+    assert response.status_code == 201, response.text
+    a, b = [r["id"] for r in response.json()["runs"]]
+
+    def no_search(*args):
+        raise AssertionError("Frozen generation must not retrieve again")
+
+    monkeypatch.setattr("app.generation.search", no_search)
+    work(a)
+    work(b)
+    assert len(calls) == 2 and calls[0][1:] == calls[1][1:]
+    data = client.get(f"/comparisons?baseline={a}&candidate={b}").json()
+    assert data["controlled_context"] and data["complete_coverage"]
+    assert data["questions"][0]["baseline"]["answer"]["model_digest"] == "digest-a"
+    assert data["questions"][0]["candidate"]["answer"]["model_digest"] == "digest-b"
+    from app.providers.ollama import GenerationError
+
+    def fail(*args):
+        raise GenerationError("timeout", "Timed out", 504)
+
+    monkeypatch.setattr("app.generation.generate", fail)
+    response = client.post(
+        "/model-comparisons",
+        json={"source_run_id": source, "models": ["model-a", "model-b"]},
+    )
+    a, b = [r["id"] for r in response.json()["runs"]]
+    work(a)
+    work(b)
+    data = client.get(f"/comparisons?baseline={a}&candidate={b}").json()
+    assert data["metrics"][0]["attempted"] == 2 and data["metrics"][0]["failed"] == 1
+    assert "request_failure" in data["questions"][0]["baseline_failures"]
+    monkeypatch.setattr(settings, "private_uploads_enabled", False)
+    assert (
+        client.post(
+            "/model-comparisons",
+            json={"source_run_id": source, "models": ["model-a", "model-b"]},
+        ).status_code
+        == 403
+    )
+
+
+def test_any_term_retrieval_and_empty_lexemes(dataset):
+    doc = dataset[1]["id"]
+    arguments = {
+        "document_id": doc,
+        "question": "cosine absentlexeme",
+        "strategy": "keyword",
+    }
+    assert client.post("/search", json=arguments).json()["items"] == []
+    result = client.post("/search", json=dict(arguments, keyword_mode="any_term"))
+    assert result.status_code == 200 and len(result.json()["items"]) == 1
+    assert (
+        client.post(
+            "/search", json=dict(arguments, question="the and", keyword_mode="any_term")
+        ).json()["items"]
+        == []
+    )
+    run_id = queue(dataset, keyword_mode="any_term")
+    work(run_id)
+    assert (
+        client.get(f"/experiments/{run_id}").json()["configuration"]["keyword_mode"]
+        == "any_term"
+    )

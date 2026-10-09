@@ -122,6 +122,7 @@ class RunRequest(BaseModel):
     dataset_id: UUID
     strategy: Literal["keyword", "vector", "hybrid"] = "keyword"
     top_k: int = Field(default=5, ge=1, le=20)
+    keyword_mode: Literal["websearch", "any_term"] = "websearch"
     split: Literal["development", "holdout"] = "development"
     mode: Literal["retrieval", "generation"] = "retrieval"
     model: str | None = Field(default=None, max_length=100)

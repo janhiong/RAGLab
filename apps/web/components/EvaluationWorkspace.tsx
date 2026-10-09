@@ -52,6 +52,7 @@ export default function EvaluationWorkspace() {
   const [run, setRun] = useState<Run | null>(null);
   const [results, setResults] = useState<Result[]>([]);
   const [strategy, setStrategy] = useState("keyword");
+  const [keywordMode, setKeywordMode] = useState("websearch");
   const [split, setSplit] = useState("development");
   const [mode, setMode] = useState("retrieval");
   const [model, setModel] = useState("");
@@ -118,6 +119,7 @@ export default function EvaluationWorkspace() {
           name: `${strategy} · ${split}`,
           dataset_id: dataset,
           strategy,
+          keyword_mode: keywordMode,
           top_k: topK,
           split,
           mode,
@@ -222,6 +224,16 @@ export default function EvaluationWorkspace() {
                   <option value="keyword">PostgreSQL full-text</option>
                   <option value="vector">Vector</option>
                   <option value="hybrid">Hybrid RRF</option>
+                </select>
+              </label>
+              <label>
+                Keyword matching
+                <select
+                  value={keywordMode}
+                  onChange={(e) => setKeywordMode(e.target.value)}
+                >
+                  <option value="websearch">Web search (baseline)</option>
+                  <option value="any_term">Any term (broader recall)</option>
                 </select>
               </label>
               <label>

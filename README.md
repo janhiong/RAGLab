@@ -6,6 +6,8 @@ A local experimentation platform for retrieval-augmented generation. Upload docu
 
 **Implemented in milestone 3:** opt-in Ollama generation, grounded answers with source references, abstention, and persisted query traces.
 
+**Implemented in milestone 5:** experiment comparisons, failure drill-down, frozen-context local-model runs, and a measured provisional keyword-retrieval change. See [comparison workflow and case study](docs/comparison.md).
+
 **Implemented in milestone 4:** versioned dataset import, a durable evaluation worker, retrieval/latency/failure metrics, manual answer-review forms, and a real provisional development export.
 
 **Not implemented yet:** controlled model comparison, human-validated labels/holdout results, or deployed public hosting. Search returns source evidence; the playground generates answers only when a local model is available. No benchmark scores are fabricated.
@@ -214,10 +216,10 @@ This is a local/private application. Set `PRIVATE_UPLOADS_ENABLED=false` before 
 
 ## Current validation
 
-46 tests pass against PostgreSQL, covering ingestion, retrieval, citation validation, abstention, persisted failures, concurrency, provider retry/timeout behavior, and model artifact checksums. Frontend production build and TypeScript checks pass. Browser checks verify the actual unavailable/model-missing states; successful citation rendering and abstention presentation use explicit test fixtures, not a real model.
+49 tests pass against PostgreSQL, covering ingestion, retrieval, citation validation, abstention, persisted failures, concurrency, provider retry/timeout behavior, and model artifact checksums. Frontend production build and TypeScript checks pass. Browser checks verify the actual unavailable/model-missing states; successful citation rendering and abstention presentation use explicit test fixtures, not a real model.
 
 Two real-model tests are explicitly skipped: the MiniLM weight CDN and Ollama weight CDN are blocked by the cloud proxy. Ollama 0.12.6 starts and answers its version/model-list endpoints, but no real LLM answer has been generated here. Review and save the recorded network requirements, retry provisioning, then enable the real-model tests. Do not treat the mocked tests as evidence of model quality or a benchmark.
 
 ## Next milestone
 
-Add controlled experiment comparisons and failure analysis. Human review of labels and actual local-model validation remain prerequisites for credible quality claims. No public deployment or validated holdout results are claimed yet.
+Prepare the portfolio launch: review dataset labels, validate actual local models, evaluate the reviewed holdout, and document deployment. No public deployment or validated holdout results are claimed yet.
